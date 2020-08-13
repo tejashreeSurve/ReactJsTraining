@@ -1,0 +1,9 @@
+.text-center {
+  align-self: center;
+  display: flex;
+  width: 400px;
+  padding: 10px;
+  float: inline-end;
+  margin: auto;
+  margin-bottom: 30px;
+}
