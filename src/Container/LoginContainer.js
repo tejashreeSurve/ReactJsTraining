@@ -1,8 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import LoginComponent from "../Component/LoginComponent";
 import * as Yup from "yup";
 import apiHelper from "../apis/apiHelper";
 const LoginContainer = () => {
+  // const initialState = {
+  //   username: "",
+  //   password: "",
+  //   usernameError: "",
+  //   passwordError: "",
+  // };
+
+  // function reducer(state, action) {
+  //   switch (action.type) {
+  //     case "username":
+  //       return { username: state.username };
+  //     case "password":
+  //       return { password: state.password };
+  //     case "usernameError":
+  //       return { usernameError: usernameError };
+  //     case "passwordError":
+  //       return { password: state.password };
+  //     default:
+  //       throw new Error();
+  //   }
+  // }
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState(null);
@@ -13,7 +35,6 @@ const LoginContainer = () => {
     password: Yup.string()
       .required("Required")
       .min(8, "Password is too short - should be 8 chars minimum."),
-    // .matches(/(?=.*[0-9])/, "Password must contain a number."),
   });
 
   const validateData = () => {
