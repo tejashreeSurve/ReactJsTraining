@@ -11,11 +11,15 @@ import {
   CardHeader,
   CardTitle,
 } from "reactstrap";
+import { useSelector } from "react-redux";
 const DashBoardContainer = () => {
+  const username = useSelector((state) => state.userdetails.full_name);
+  console.log("username ", username);
   return (
     <Card className="dashboard-card">
       <CardHeader>
         <h1>DISCOVER PROJECT</h1>
+        <h2>{`Welcome ${username}`}</h2>
       </CardHeader>
       <div className="projectCard">
         <DashBoardComponent

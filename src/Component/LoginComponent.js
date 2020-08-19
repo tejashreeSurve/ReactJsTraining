@@ -15,22 +15,22 @@ import {
 } from "reactstrap";
 import "../Css/LoginComponent.css";
 import PropsTypes from "prop-types";
-
+import { setUsername, setPassword } from "../Reducer/ActionDispatch";
 const LoginComponent = (props) => {
   const {
     username,
     password,
-    setUsername,
-    setPassword,
     usernameError,
     passwordError,
+    login,
+    dispatch,
     validateData,
   } = props;
   const setUsernameWraper = (event) => {
-    setUsername(event.target.value);
+    dispatch(setUsername(event.target.value));
   };
   const setPasswordWraper = (event) => {
-    setPassword(event.target.value);
+    dispatch(setPassword(event.target.value));
   };
 
   return (
@@ -52,7 +52,7 @@ const LoginComponent = (props) => {
                     placeholder="Email"
                     value={username}
                     onChange={setUsernameWraper}
-                    invalid={usernameError !== null}
+                    invalid={usernameError === "" ? false : true}
                   />
                   <FormFeedback>{usernameError}</FormFeedback>
                 </FormGroup>
@@ -65,11 +65,11 @@ const LoginComponent = (props) => {
                     placeholder="Password"
                     value={password}
                     onChange={setPasswordWraper}
-                    invalid={passwordError !== null}
+                    invalid={passwordError === "" ? false : true}
                   />
                   <FormFeedback>{passwordError}</FormFeedback>
                 </FormGroup>
-                <Button color="primary" onClick={validateData}>
+                <Button color="primary" onClick={validateData} disabled={login}>
                   Login
                 </Button>
               </Form>

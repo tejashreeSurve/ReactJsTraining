@@ -2,33 +2,27 @@ import React, { useState, useReducer } from "react";
 import LoginComponent from "../Component/LoginComponent";
 import * as Yup from "yup";
 import apiHelper from "../apis/apiHelper";
+import { useDispatch, useSelector } from "react-redux";
+import LoginReducer, { initialState } from "../Reducer/LoginReducer";
+import DashBoardContainer from "../Container/DashBoardContainer";
+import {
+  setUsernameError,
+  setPasswordError,
+  setLogin,
+  setUserDetails,
+} from "../Reducer/ActionDispatch";
+import { Redirect } from "react-router-dom";
+
 const LoginContainer = () => {
-  // const initialState = {
-  //   username: "",
-  //   password: "",
-  //   usernameError: "",
-  //   passwordError: "",
-  // };
+  const username = useSelector((state) => state.username);
+  const password = useSelector((state) => state.password);
+  const usernameError = useSelector((state) => state.usernameError);
+  const passwordError = useSelector((state) => state.passwordError);
+  const login = useSelector((state) => state.login);
+  const userdetails = useSelector((state) => state.userdetails);
+  const dispatch = useDispatch();
 
-  // function reducer(state, action) {
-  //   switch (action.type) {
-  //     case "username":
-  //       return { username: state.username };
-  //     case "password":
-  //       return { password: state.password };
-  //     case "usernameError":
-  //       return { usernameError: usernameError };
-  //     case "passwordError":
-  //       return { password: state.password };
-  //     default:
-  //       throw new Error();
-  //   }
-  // }
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [usernameError, setUsernameError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
+  const loginDetails = { username, password };
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().email().required("Required"),
@@ -39,33 +33,42 @@ const LoginContainer = () => {
 
   const validateData = () => {
     validationSchema
-      .validate({ username, password }, { abortEarly: false })
+      .validate(loginDetails, { abortEarly: false })
       .then(() => {
+        dispatch(setLogin(true));
+        console.log("login", login);
         apiHelper("post", "https://api.taiga.io/api/v1/auth", {
-          username,
-          password,
+          username: username,
+          password: password,
           type: "normal",
-        }).then((response) => {
-          console.log(response);
+        }).then(({ data }) => {
+          dispatch(setUserDetails(data));
+          console.log(data);
         });
       })
       .catch((error) => {
         error.inner.forEach((ele) => {
-          if (ele.path === "username") setUsernameError(ele.message);
-          if (ele.path === "password") setPasswordError(ele.message);
-          console.log(ele.path, ele.message);
+          if (ele.path === "username") {
+            dispatch(setUsernameError(ele.message));
+            console.log(usernameError);
+          }
+          if (ele.path === "password") dispatch(setPasswordError(ele.message));
         });
       });
   };
+
+  if (userdetails.auth_token) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <LoginComponent
       username={username}
       password={password}
-      setUsername={setUsername}
-      setPassword={setPassword}
       usernameError={usernameError}
       passwordError={passwordError}
+      login={login}
+      dispatch={dispatch}
       validateData={validateData}
     />
   );
