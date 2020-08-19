@@ -17,15 +17,7 @@ import "../Css/LoginComponent.css";
 import PropsTypes from "prop-types";
 import { setUsername, setPassword } from "../Reducer/ActionDispatch";
 const LoginComponent = (props) => {
-  const {
-    username,
-    password,
-    usernameError,
-    passwordError,
-    login,
-    dispatch,
-    validateData,
-  } = props;
+  const { state, dispatch, validateData } = props;
   const setUsernameWraper = (event) => {
     dispatch(setUsername(event.target.value));
   };
@@ -50,11 +42,11 @@ const LoginComponent = (props) => {
                     name="email"
                     id="exampleEmail"
                     placeholder="Email"
-                    value={username}
+                    value={state.username}
                     onChange={setUsernameWraper}
-                    invalid={usernameError === "" ? false : true}
+                    invalid={state.usernameError === "" ? false : true}
                   />
-                  <FormFeedback>{usernameError}</FormFeedback>
+                  <FormFeedback>{state.usernameError}</FormFeedback>
                 </FormGroup>
                 <FormGroup>
                   <Label for="examplePassword">Password</Label>
@@ -63,13 +55,17 @@ const LoginComponent = (props) => {
                     name="password"
                     id="examplePassword"
                     placeholder="Password"
-                    value={password}
+                    value={state.password}
                     onChange={setPasswordWraper}
-                    invalid={passwordError === "" ? false : true}
+                    invalid={state.passwordError === "" ? false : true}
                   />
-                  <FormFeedback>{passwordError}</FormFeedback>
+                  <FormFeedback>{state.passwordError}</FormFeedback>
                 </FormGroup>
-                <Button color="primary" onClick={validateData} disabled={login}>
+                <Button
+                  color="primary"
+                  onClick={validateData}
+                  disabled={state.login}
+                >
                   Login
                 </Button>
               </Form>

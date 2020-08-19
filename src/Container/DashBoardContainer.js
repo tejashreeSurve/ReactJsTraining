@@ -19,7 +19,7 @@ const DashBoardContainer = () => {
     <Card className="dashboard-card">
       <CardHeader>
         <h1>DISCOVER PROJECT</h1>
-        <h2>{`Welcome ${username}`}</h2>
+        {/* // <h2>{`Welcome ${username}`}</h2> */}
       </CardHeader>
       <div className="projectCard">
         <DashBoardComponent
